@@ -24,7 +24,7 @@ jobs:
             - name: Lint Terraform
               run: tflint --format=compact
             - name: Vulnerability Scan
-              uses: aquasecurity/tfsec-sarif-action@v1.0.4
+              uses: aquasecurity/tfsec-sarif-action@v0.1.4
               with:
                 sarif_file: tfsec.sarif
                 soft_fail: true
