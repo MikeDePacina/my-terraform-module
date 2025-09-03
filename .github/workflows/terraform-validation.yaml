@@ -1,0 +1,41 @@
+name: format, security scan, and validate TF
+
+on:
+    push:
+        branches:
+            - main
+    workflow_dispatch:
+
+
+
+jobs:
+    validate:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v5
+            - name: HashiCorp - Setup Terraform
+              uses: hashicorp/setup-terraform@v3.1.2
+              with:
+                terraform_version: 1.13.1
+            - name: setup TFLint
+              uses: terraform-linters/setup-tflint@v4
+              with:
+                tflint_version: v0.59.1
+            - name: Lint Terraform
+              run: tflint --format=compact
+            - name: Vulnerability Scan
+              uses: aquasecurity/tfsec-sarif-action@v1.0.4
+              with:
+                sarif_file: tfsec.sarif
+                soft_fail: true
+            - name: upload vulnerability report
+              uses: github/codeql-action/upload-sarif@v3
+              with:
+                path: tfsec.sarif
+
+            - name: Terraform Init
+              run: terraform init
+            - name: Terraform Format
+              run: terraform fmt -check
+            - name: Terraform Validate
+              run: terraform validate
