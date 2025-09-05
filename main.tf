@@ -1,4 +1,5 @@
 terraform {
+  required_version = "1.13.1"
   required_providers {
     aws = {
       source = "hashicorp/aws"
@@ -15,7 +16,6 @@ provider "aws" {
 
 module "networking" {
   source = "./networking"
-
   vpc-cidr = var.vpc-cidr
   num-of-private-subnets = var.num-of-private-subnets
   num-of-public-subnets = var.num-of-public-subnets

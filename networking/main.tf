@@ -2,17 +2,10 @@ resource "aws_vpc" "main" {
   cidr_block = var.vpc-cidr
 }
 
-locals {
-  subnets_cidr         = cidrsubnets(var.vpc-cidr, var.num-of-private-subnets + var.num-of-public-subnets)
-  private_subnets_cidr = slice(local.subnets_cidr, 0, var.num-of-private-subnets)
-  public_subnets_cidr  = slice(local.subnets_cidr, var.num-of-private-subnets, length(local.subnets_cidr))
-}
-
-
 resource "aws_subnet" "private" {
   vpc_id            = aws_vpc.main.id
   count             = var.num-of-private-subnets
-  cidr_block        = local.private_subnets_cidr[count.index]
+  cidr_block        = cidrsubnet(var.vpc-cidr, 2, count.index)
   availability_zone = element(data.aws_availability_zones.available.names, count.index)
   tags = {
     Name = "private-subnet-${count.index + 1}"
@@ -22,7 +15,7 @@ resource "aws_subnet" "private" {
 resource "aws_subnet" "public" {
   vpc_id            = aws_vpc.main.id
   count             = var.num-of-public-subnets
-  cidr_block        = local.public_subnets_cidr[count.index]
+  cidr_block        = cidrsubnet(var.vpc-cidr, 2, count.index + var.num-of-private-subnets)
   availability_zone = element(data.aws_availability_zones.available.names, count.index)
   tags = {
     Name = "public-subnet-${count.index + 1}"
@@ -57,13 +50,32 @@ resource "aws_internet_gateway" "gateway" {
   vpc_id = aws_vpc.main.id
 }
 
-resource "aws_route_table" "route-table" {
+resource "aws_route_table" "private_subnet_route_tables" {
+  count = var.num-of-private-subnets
   vpc_id = aws_vpc.main.id
 }
 
-resource "aws_route" "route" {
-  count                  = var.num-of-public-subnets
-  route_table_id         = aws_route_table.route-table.id
-  destination_cidr_block = local.public_subnets_cidr[count.index]
-  gateway_id             = aws_internet_gateway.gateway.id
+resource "aws_route_table" "public_subnet_route_tables"{
+  count = var.num-of-public-subnets
+  vpc_id = aws_vpc.main.id
+
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.gateway.id
+  }
 }
+
+resource "aws_route_table_association" "public_subnet_association" {
+  count          = var.num-of-public-subnets
+  subnet_id      = aws_subnet.public[count.index].id
+  route_table_id = aws_route_table.public_subnet_route_tables[count.index].id
+}
+
+resource "aws_route_table_association" "private_subnet_association"{
+  count = var.num-of-private-subnets
+  subnet_id      = aws_subnet.private[count.index].id
+  route_table_id = aws_route_table.private_subnet_route_tables[count.index].id
+}
+
+
+
