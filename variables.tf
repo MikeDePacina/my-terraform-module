@@ -41,3 +41,20 @@ variable "num-of-public-subnets" {
     error_message = "The number of public subnets must be between 1 and 2."
   }
 }
+
+variable "environment" {
+  type = string
+  default = terraform.workspace
+}
+
+variable "ec2_instance_type" {
+  description = "The EC2 instance type"
+  type        = map(string)
+  default     = {
+    default = "t3.micro"
+    dev    = "t3.micro"
+    prod  = "t3.small"
+  }
+  
+}
+
