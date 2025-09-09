@@ -12,7 +12,7 @@ variable "aws-region" {
 variable "aws_access_key" {
   description = "The AWS access key"
   type        = string
-  sensitive = true
+  sensitive   = true
 }
 
 variable "aws_secret_key" {
@@ -23,10 +23,10 @@ variable "aws_secret_key" {
 variable "num-of-private-subnets" {
   description = "The number of private subnets to create"
   type        = number
-  default = 1
+  default     = 1
 
   validation {
-    condition = var.num-of-private-subnets > 0 && var.num-of-private-subnets <= 2
+    condition     = var.num-of-private-subnets > 0 && var.num-of-private-subnets <= 2
     error_message = "The number of private subnets must be between 1 and 2."
   }
 }
@@ -34,27 +34,23 @@ variable "num-of-private-subnets" {
 variable "num-of-public-subnets" {
   description = "The number of public subnets to create"
   type        = number
-  default = 1
+  default     = 1
 
   validation {
-    condition = var.num-of-public-subnets > 0 && var.num-of-public-subnets <= 2
+    condition     = var.num-of-public-subnets > 0 && var.num-of-public-subnets <= 2
     error_message = "The number of public subnets must be between 1 and 2."
   }
 }
 
-variable "environment" {
-  type = string
-  default = terraform.workspace
-}
 
 variable "ec2_instance_type" {
   description = "The EC2 instance type"
   type        = map(string)
-  default     = {
+  default = {
     default = "t3.micro"
-    dev    = "t3.micro"
-    prod  = "t3.small"
+    dev     = "t3.micro"
+    prod    = "t3.small"
   }
-  
+
 }
 
