@@ -42,15 +42,3 @@ variable "num-of-public-subnets" {
   }
 }
 
-
-variable "ec2_instance_type" {
-  description = "The EC2 instance type"
-  type        = map(string)
-  default = {
-    default = "t3.micro"
-    dev     = "t3.micro"
-    prod    = "t3.small"
-  }
-
-}
-

@@ -19,3 +19,13 @@ output "public_subnets_cidr" {
 }
 
 
+output "private_sg_id" {
+  value = aws_security_group.private-instances-sg.id
+}
+
+output "public_sg_id" {
+  value = aws_security_group.public-instances-sg.id
+}
+
+
+

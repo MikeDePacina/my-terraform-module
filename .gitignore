@@ -1,2 +1,5 @@
 networking/tests/.terraform/
 networking/tests/.terraform.lock.hcl
+
+tests/.terraform/
+tests/.terraform.lock.hcl

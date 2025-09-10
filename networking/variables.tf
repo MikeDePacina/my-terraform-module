@@ -26,3 +26,13 @@ variable "num-of-public-subnets" {
   }
 }
 
+
+variable "allowed-traffic-from-and-to-public-to-private-subnets" {
+  type = list(object({
+    from_port = number,
+    to_port   = number,
+    protocol  = string,
+  }))
+  default     = []
+  description = "List of allowed traffic from and to private and public to create NACL rules and SGs"
+}
