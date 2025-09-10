@@ -11,6 +11,10 @@ on:
 jobs:
     validate:
         runs-on: ubuntu-latest
+        permissions:
+          contents: read
+          packages: write
+          security-events: write
         steps:
             - uses: actions/checkout@v5
             - name: HashiCorp - Setup Terraform
