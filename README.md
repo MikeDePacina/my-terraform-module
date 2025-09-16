@@ -1,3 +1,6 @@
+## A Highly Available (Multi AZ) and Secure (implements NACLs and SGs) AWS architecture
+
+
 Architecture Diagram for example_usage.tf in tests folder
 
 
