@@ -3,5 +3,4 @@
 
 Architecture Diagram for example_usage.tf in tests folder
 
-
-![ADubs](https://github.com/user-attachments/assets/4804558b-c22e-4521-8560-c781613e1bef)
+![ADubs drawio](https://github.com/user-attachments/assets/742d019b-4a68-4840-974f-f83326e5bbcd)
